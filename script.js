@@ -50,8 +50,8 @@ function cardData() {
        $(".card-img-top").attr('src', myImage);
 $(".temperature").text(temperature);
     });
-    
-
+    let s = new WeatherDisplay(currentLocation, temperature, forecast, humidity);  
+s.makeCard()
 }
 //Creates a Weather Card
 
@@ -68,27 +68,30 @@ class WeatherDisplay {
 
 //This creates the card
 makeCard()  {
-let myImage = "https://source.unsplash.com/300x200/?" + this.forecast + "," + this.name;
+let cityName= (this.name).replace(/\s+/g, '');
 let newCard = $(".sample-card");
 let myCard= $("<div/>")
 myCard.addClass("card");
 
 myCard.html("<img class='card-img-top' src='#' alt='Card image cap'>")
+$(".card-image-top").attr("id", cityName+ "card-image-top")
 
 let cardBody = $("<div/>");
 console.log(cardBody)
 cardBody.addClass("card-body");
 cardBody.html("<li class='list-group-item temperature'>one</li> <li class='list-group-item forecast'>two</li>  <li class='list-group-item humidity'>three</li> ");
+
+
 myCard.append(cardBody);
 
 newCard.append(myCard);
 
+$(".temperature").attr("id", cityName + "-temperature");
+$(".forecast").attr("id", cityName + "-forecast");
+$(".humidity").attr("id", cityName + "-humidity");
 
-}}
 
-let s = new WeatherDisplay(currentLocation, temperature, forecast, humidity  );
+}
+}
 
 findLocation()
-
-s.makeCard()
-
