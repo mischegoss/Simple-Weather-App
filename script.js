@@ -1,3 +1,6 @@
+
+$( document ).ready(function() {
+
 let currentLocation;
 let temperature;
 let forecast;
@@ -9,7 +12,8 @@ function findLocation () {
     .then(
         function success(response) {
             currentLocation = response.city;
-            $(".current-location").text(currentLocation);
+            $(".current-location").text(currentLocation)
+            $("#location-prompt").text(currentLocation);;
             cardData(currentLocation);
 
            
@@ -34,8 +38,10 @@ function findLocation () {
 function cardData() {
     const appId = "da9ee3ddb46b386ecd69f797bbede23b";
     const cityName = (currentLocation).replace(/\s+/g, '');
-    console.log(cityName)
+    
     const weather = "http://api.openweathermap.org/data/2.5/weather?q=" + currentLocation + "&APPID=" + appId;
+
+    
 
     $.getJSON(weather,function(json){
         console.log(json)
@@ -45,10 +51,13 @@ function cardData() {
 
        console.log(temperature, forecast, humidity);
        let forecastAsString = forecast.replace(/\s+/g, '');
-       let myImage = "https://source.unsplash.com/200x200/?"+ "wheeling" + ",city,weather," + forecastAsString;
+       let myImage = "https://source.unsplash.com/200x200/?"+ cityName + ",forecast," + forecastAsString;
        console.log(myImage)
        $(".card-img-top").attr('src', myImage);
-$(".temperature").text(temperature);
+       $("#lmage-pic").attr('src', myImage);
+$("#" + cityName + "-temperature" ).text(temperature);
+$("#" + cityName + "-forecast" ).text(forecast);
+$("#" + cityName + "-humidity" ).text(humidity);
     });
     let s = new WeatherDisplay(currentLocation, temperature, forecast, humidity);  
 s.makeCard()
@@ -95,3 +104,4 @@ $(".humidity").attr("id", cityName + "-humidity");
 }
 
 findLocation()
+}); //Document Ready End 
