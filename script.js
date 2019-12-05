@@ -6,14 +6,23 @@ let temperature;
 let forecast;
 let humidity;
 
+
+function setPopup() {
+    $(".container").hide();
+
+}
+
 //This uses IP-API to find  user's current location
 function findLocation () {
     $.ajax('http://ip-api.com/json')
     .then(
         function success(response) {
             currentLocation = response.city;
-            $(".current-location").text(currentLocation)
-            $("#location-prompt").text(currentLocation);;
+           
+            let message = "It looks like it is a good day in " + currentLocation
+             
+            consoleText( [message, message, message], "text")
+            $(".location-prompt").text(currentLocation);
             cardData(currentLocation);
 
            
@@ -58,6 +67,8 @@ function cardData() {
 $("#" + cityName + "-temperature" ).text(temperature);
 $("#" + cityName + "-forecast" ).text(forecast);
 $("#" + cityName + "-humidity" ).text(humidity);
+
+ 
     });
     let s = new WeatherDisplay(currentLocation, temperature, forecast, humidity);  
 s.makeCard()
@@ -102,6 +113,59 @@ $(".humidity").attr("id", cityName + "-humidity");
 
 }
 }
+/*You can add this to any text block with ID */
+consoleText(["fancy butt", "smiley"], "header", "green")
 
+/*This is the fancy way to type */
+function consoleText(words, id, colors) {
+  if (colors === undefined) colors = ['#fff'];
+  var visible = true;
+  var con = document.getElementById('console');
+  var letterCount = 1;
+  var x = 1;
+  var waiting = false;
+  var target = document.getElementById(id)
+  target.setAttribute('style', 'color:' + colors[0])
+  window.setInterval(function() {
+
+    if (letterCount === 0 && waiting === false) {
+      waiting = true;
+      target.innerHTML = words[0].substring(0, letterCount)
+      window.setTimeout(function() {
+        var usedColor = colors.shift();
+        colors.push(usedColor);
+        var usedWord = words.shift();
+        words.push(usedWord);
+        x = 1;
+        target.setAttribute('style', 'color:' + colors[0])
+        letterCount += x;
+        waiting = false;
+      }, 1000000)
+    } else if (letterCount === words[0].length + 1 && waiting === false) {
+      waiting = true;
+      window.setTimeout(function() {
+        x = -1;
+        letterCount += x;
+        waiting = false;
+      }, 100000)
+    } else if (waiting === false) {
+      target.innerHTML = words[0].substring(0, letterCount)
+      letterCount += x;
+    }
+  }, 120)
+  window.setInterval(function() {
+    if (visible === true) {
+      con.className = 'console-underscore hidden'
+      visible = false;
+
+    } else {
+      con.className = 'console-underscore'
+
+      visible = true;
+    }
+  }, 400)
+}
+/*End of the fancy code going on */
 findLocation()
+setPopup()
 }); //Document Ready End 
